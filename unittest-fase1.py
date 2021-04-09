@@ -23,8 +23,8 @@ class Test(unittest.TestCase):
     def test1_addPatient(self):
         print('\tCase1 addPatient: insert at the beginning\n')
         
-        expected=HealthCenter('Fase1-Alumnos\data\LosFrailes1.tsv')    
-        result=HealthCenter('Fase1-Alumnos\data\LosFrailes.tsv')  
+        expected=HealthCenter('data\LosFrailes1.tsv')    
+        result=HealthCenter('data\LosFrailes.tsv')  
 
         objP=Patient('Abad, Abel',1950,0,1)
         result.addPatient(objP)               
@@ -39,9 +39,9 @@ class Test(unittest.TestCase):
     def test2_addPatient(self):
         print('\tCase2 addPatient: insert at the END\n')
         
-        expected=HealthCenter('Fase1-Alumnos\data\LosFrailesLast.tsv')
+        expected=HealthCenter('data\LosFrailesLast.tsv')
 
-        result=HealthCenter('Fase1-Alumnos\data\LosFrailes.tsv')
+        result=HealthCenter('data\LosFrailes.tsv')
         objP=Patient('Zen, Chen',1995,1,0)
         result.addPatient(objP)
         
@@ -55,9 +55,9 @@ class Test(unittest.TestCase):
     def test3_addPatient(self):
         print('\tCase3 addPatient: try add a patient who already exists\n')
         
-        expected=HealthCenter('Fase1-Alumnos\data\LosFrailes.tsv')
+        expected=HealthCenter('data\LosFrailes.tsv')
 
-        result=HealthCenter('Fase1-Alumnos\data\LosFrailes.tsv')
+        result=HealthCenter('data\LosFrailes.tsv')
         objP=Patient('Hoz, Mario',1928,1,0)
         result.addPatient(objP)
         
@@ -72,10 +72,10 @@ class Test(unittest.TestCase):
     def test4_addPatient(self):
         print('\tCase4 addPatient: add a patient\n')
         
-        expected=HealthCenter('Fase1-Alumnos\data\LosFrailesMiddle.tsv')
+        expected=HealthCenter('data\LosFrailesMiddle.tsv')
         #Quirante, Pepe	1985	0	0
 
-        result=HealthCenter('Fase1-Alumnos\data\LosFrailes.tsv')
+        result=HealthCenter('data\LosFrailes.tsv')
 
         objP=Patient('Quirante, Pepe',1985,0,0)
         result.addPatient(objP)
@@ -85,13 +85,13 @@ class Test(unittest.TestCase):
             self.assertEqual(result.getAt(i).name,expected.getAt(i).name,'FAIL: patients are not equal')
         print()
         Test.mark+=0.5
-
-
-    """ def test5_searchPatients(self):
+    
+    
+    def test5_searchPatients(self):
         print('\tCase5 searchPatients: allpatients\n')
         
-        input=HealthCenter('data/LosFrailes.tsv')
-        expected=HealthCenter('data/LosFrailes.tsv')
+        input=HealthCenter('data\LosFrailes.tsv')
+        expected=HealthCenter('data\LosFrailes.tsv')
 
         result=input.searchPatients(2021,None,None)
         
@@ -101,7 +101,8 @@ class Test(unittest.TestCase):
         print()
         Test.mark+=0.25
 
-        
+
+      
     def test6_searchPatients(self):
         print('\tCase 6 searchPatients: all patients who were born in or before 1950 \n')
         
@@ -115,7 +116,7 @@ class Test(unittest.TestCase):
         print()
         Test.mark+=0.25
 
-        
+         
     def test7_searchPatients(self):
         print('\tCase 7 searchPatients: all patients who have had covid \n')
         
@@ -131,7 +132,7 @@ class Test(unittest.TestCase):
         Test.mark+=0.25
     
     def test8_searchPatients(self):
-        print('\tCase 8 searchPatients: all patients who were born in or before than 1925 and have had covid \n')
+        print('\tCase 8 searchPatients: all patients who were born in or before than 1950 and have had covid \n')
         
         input=HealthCenter('data/LosFrailes.tsv')
 
@@ -242,15 +243,10 @@ class Test(unittest.TestCase):
 
         
     def test15_inter(self):
-        print('\tCase 14 inter\n')
-        
+        print('\tCase 14 inter\n')       
         input1=HealthCenter('data/LosFrailes.tsv')
         input2=HealthCenter('data/LosFrailes3.tsv')
-
-
         result=input1.inter(input2)
-        
-        
         expected=HealthCenter('data/LosFrailesyLosFrailes3.tsv')
         
         self.assertEqual(len(result),len(expected),'FAIL: lenghts are different')
@@ -258,7 +254,7 @@ class Test(unittest.TestCase):
               self.assertEqual(result.getAt(i).name,expected.getAt(i).name,'FAIL: patients are not equal')
         print()
         
-        Test.mark+=1.75 """
+        Test.mark+=1.75
 
     def test_showmark(self):
         print('Total mark is ', Test.mark)

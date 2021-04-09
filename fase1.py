@@ -78,7 +78,7 @@ class HealthCenter(DList):
             aux_node.next = search_node.next 
 
             #if the new node isn't the tail of the list
-            if search_node.next is not None:
+            if search_node.next:
                 aux_node.next.prev = aux_node
                
             search_node.next = aux_node
@@ -105,32 +105,135 @@ class HealthCenter(DList):
                 flag = True    
                 return 1    
             current = current.next    
-            i = i + 1    
+              
                 
         if(flag):            
             return 1     
         else:    
-            return 0  
-
-                
-
-        
+            return 0                   
         
     def searchPatients(self,year,covid=None,vaccine=None):
-       ...
+        result = HealthCenter()   
+        #Node current will point to head    
+        current = self._head    
+            
+        #Checks whether the list is empty    
+        if(self._head == None):    
+            print("List is empty")    
+            return None   
+        #aux method       
+        while current:
+            if year == 2021 or year >= current.elem.year:               
+                if covid == None:
+                    if vaccine == None:
+                        #Retrieves all the patients of the list or the one that matches the input year.
+                        result.addPatient(current.elem)
+                    elif vaccine == current.elem.vaccine:
+                        result.addPatient(current.elem)
+                elif covid == current.elem.covid:
+                    if vaccine == None:
+                        result.addPatient(current.elem)
+                    elif vaccine == current.elem.vaccine:
+                        result.addPatient(current.elem)           
+            current = current.next
+        return result  
     
     def statistics(self):
-        ...
+        numcovid = numcovid1950 = novaccine = novaccine1950 = numvaccine1 = numvaccine2 = numpatients1950 = 0
+
+        #Node current will point to head    
+        current = self._head    
+   
+        #Checks whether the list is empty    
+        if(self._head == None):    
+            print("List is empty")    
+            return None   
+                
+        while current:
+            if current.elem.covid:
+                numcovid = numcovid + 1
+            if (current.elem.year <= 1950):
+                numpatients1950 = numpatients1950 + 1
+            if (current.elem.year <= 1950) and current.elem.covid == True:
+                numcovid1950 = numcovid1950 + 1
+            if current.elem.vaccine == 0:
+                novaccine = novaccine + 1
+            if current.elem.year <= 1950 and current.elem.vaccine == 0:
+                novaccine1950 = novaccine1950 + 1
+            if current.elem.vaccine == 1:
+                numvaccine1 = numvaccine1 + 1
+            if current.elem.vaccine == 2:
+                numvaccine2 = numvaccine2 + 1
+            current = current.next   
+        
+        numcovid = round(numcovid/self._size,2)
+        numcovid1950 = round(numcovid1950/numpatients1950,2)
+        novaccine = round(novaccine/self._size,2)
+        novaccine1950 = round(novaccine1950/numpatients1950,2)
+        numvaccine1 = round(numvaccine1/self._size,2)
+        numvaccine2 = round(numvaccine2/self._size,2)
+        
+        return(numcovid,numcovid1950,novaccine,novaccine1950,numvaccine1,numvaccine2)   
 
     def merge(self,other):
-       ...
+       result = self
+       #Node current will point to head    
+       current = other._head    
+   
+       #Checks whether the list is empty    
+       if(result._head == None):    
+            print("List is empty")    
+            return None   
+                
+       while current:
+           result.addPatient(current.elem)
+           current = current.next   
+       return result
     
-    
+   
+
     def minus(self,other):
-       ...
+        #Makes a copy of self HealthCenter
+        result = self
+        #Sets the current node for the second list
+        current_other = other._head      
+        #Goes first through the second list
+        while current_other:
+           current = result._head
+           #Sets an index to know the position of the node in case it has to be deleted
+           i = 0
+           #Goes through the first list to search for the Patients of second list one by one          
+           while current:
+               if current_other.elem.name == current.elem.name:
+                   #Saves the next pointer before deleting the node at i position
+                   current = current.next                                
+                   result.removeAt(i)                              
+               else:
+                   #Sets the next position in case it didn't find the element
+                    current = current.next                  
+               i = i + 1
+           current_other = current_other.next   	
+        return result
     
     def inter(self,other):
-        ...
+        
+        result = HealthCenter()
+        #Sets the current node for the second list
+        current_other = other._head      
+        #Goes first through the second list
+        while current_other:
+           current = self._head
+           #Sets an index to know the position of the node in case it has to be deleted
+
+           #Goes through the first list to search for the Patients of second list one by one          
+           while current:
+               if current_other.elem.name == current.elem.name:
+                   #Saves the next pointer before deleting the node at i position
+                   result.addPatient(current.elem)                                  
+               current = current.next                  
+
+           current_other = current_other.next   	
+        return result
                 
     
      
