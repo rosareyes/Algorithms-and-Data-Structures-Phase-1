@@ -22,10 +22,9 @@ class Test(unittest.TestCase):
     
     def test1_addPatient(self):
         print('\tCase1 addPatient: insert at the beginning\n')
-        
+      
         expected=HealthCenter('data\LosFrailes1.tsv')    
         result=HealthCenter('data\LosFrailes.tsv')  
-
         objP=Patient('Abad, Abel',1950,0,1)
         result.addPatient(objP)               
         self.assertEqual(len(result),len(expected),'FAIL: lenghts are different')

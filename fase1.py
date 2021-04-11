@@ -32,13 +32,10 @@ class HealthCenter(DList):
             self.name=''
 
         else: 
-            print('loading the data for the health center from the file ',filetsv)
-    
+            print('loading the data for the health center from the file ',filetsv)    
             self.name=filetsv.replace('.tsv','')
             tsv_file = open(filetsv)
-            read_tsv = csv.reader(tsv_file, delimiter="\t")
-    
-    
+            read_tsv = csv.reader(tsv_file, delimiter="\t")   
             for row in read_tsv:
                 name=row[0]
                 year=int(row[1])
@@ -58,20 +55,17 @@ class HealthCenter(DList):
         aux_node = DNode(patient)
         if self.isEmpty():
             self._head = aux_node
-        elif self.searchNode(patient):
+        elif self.searchName(patient):
             print("patient already on the list")
             return
         #insert the node at the beginning      
-        elif self._head.elem.name >= aux_node.elem.name:
-           
+        elif self._head.elem.name >= aux_node.elem.name:         
             aux_node.next = self._head
             aux_node.next.prev = aux_node
             self._head = aux_node
         else:
             search_node = self._head
-
             #Find the node that will be before the aux node
-
             while (search_node.next and (search_node.next.elem.name < aux_node.elem.name)):
                 search_node = search_node.next
 
@@ -85,11 +79,11 @@ class HealthCenter(DList):
             aux_node.prev = search_node
         #increase the size of the list  
         self._size+=1
-        print(self)
+       
           
-    def searchNode(self, e):
+    def searchName(self, e):
         "search for an specific patient's name on the list"    
-        i = 1;    
+        i = 1    
         flag = False    
         #Node current will point to head    
         current = self._head    
@@ -105,40 +99,35 @@ class HealthCenter(DList):
                 flag = True    
                 return 1    
             current = current.next    
-              
-                
-        if(flag):            
-            return 1     
-        else:    
+                           
+        if not flag:            
             return 0                   
         
     def searchPatients(self,year,covid=None,vaccine=None):
-        result = HealthCenter()   
+        "search for all patients within the given parameters"
+        result = HealthCenter()         
         #Node current will point to head    
         current = self._head    
-            
-        #Checks whether the list is empty    
-        if(self._head == None):    
-            print("List is empty")    
-            return None   
-        #aux method       
+                   
+        #could be an aux method / no need to check if the head is empty bc in that case will return an empty DList.      
         while current:
             if year == 2021 or year >= current.elem.year:               
                 if covid == None:
                     if vaccine == None:
                         #Retrieves all the patients of the list or the one that matches the input year.
-                        result.addPatient(current.elem)
+                        result.addLast(current.elem)
                     elif vaccine == current.elem.vaccine:
-                        result.addPatient(current.elem)
+                        result.addLast(current.elem)
                 elif covid == current.elem.covid:
                     if vaccine == None:
-                        result.addPatient(current.elem)
+                        result.addLast(current.elem)
                     elif vaccine == current.elem.vaccine:
-                        result.addPatient(current.elem)           
+                        result.addLast(current.elem)           
             current = current.next
         return result  
     
     def statistics(self):
+        "Gives statistics about the invoking HealthCenter"
         numcovid = numcovid1950 = novaccine = novaccine1950 = numvaccine1 = numvaccine2 = numpatients1950 = 0
 
         #Node current will point to head    
@@ -176,15 +165,11 @@ class HealthCenter(DList):
         return(numcovid,numcovid1950,novaccine,novaccine1950,numvaccine1,numvaccine2)   
 
     def merge(self,other):
+       "Merges the patients of two health centers"
        result = self
        #Node current will point to head    
-       current = other._head    
-   
-       #Checks whether the list is empty    
-       if(result._head == None):    
-            print("List is empty")    
-            return None   
-                
+       current = other._head      
+                      
        while current:
            result.addPatient(current.elem)
            current = current.next   
@@ -193,6 +178,7 @@ class HealthCenter(DList):
    
 
     def minus(self,other):
+        "Deletes patients in the invoking center that are in the given center"
         #Makes a copy of self HealthCenter
         result = self
         #Sets the current node for the second list
@@ -216,7 +202,7 @@ class HealthCenter(DList):
         return result
     
     def inter(self,other):
-        
+        "Intersects patients of the invoking center with the patients of the given one"
         result = HealthCenter()
         #Sets the current node for the second list
         current_other = other._head      
