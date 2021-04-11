@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Spyder Editor
-
-This is a temporary script file.
+Lab Case 1:
+Rosa Reyes
+Ines Sanz
 """
 
 from dlist import DList
@@ -51,65 +51,41 @@ class HealthCenter(DList):
     
     def addPatient(self,patient):
         "add a new patient in alphabetic order"
-        #create the new node to be inserted
-        aux_node = DNode(patient)
-        if self.isEmpty():
-            self._head = aux_node
-        elif self.searchName(patient):
-            print("patient already on the list")
-            return
-        #insert the node at the beginning      
-        elif self._head.elem.name >= aux_node.elem.name:         
-            aux_node.next = self._head
-            aux_node.next.prev = aux_node
-            self._head = aux_node
-        else:
-            search_node = self._head
-            #Find the node that will be before the aux node
-            while (search_node.next and (search_node.next.elem.name < aux_node.elem.name)):
-                search_node = search_node.next
-
-            aux_node.next = search_node.next 
-
-            #if the new node isn't the tail of the list
-            if search_node.next:
-                aux_node.next.prev = aux_node
-               
-            search_node.next = aux_node
-            aux_node.prev = search_node
-        #increase the size of the list  
-        self._size+=1
-       
-          
-    def searchName(self, e):
-        "search for an specific patient's name on the list"    
-        i = 1    
-        flag = False    
-        #Node current will point to head    
-        current = self._head    
-            
-        #Checks whether the list is empty    
-        if(self._head == None):    
-            print("List is empty")    
-            return 0    
-                
-        while current:    
-            #Compare value to be searched with each node in the list    
-            if(current.elem.name == e.name):    
-                flag = True    
-                return 1    
-            current = current.next    
-                           
-        if not flag:            
-            return 0                   
         
+        if self.isEmpty():
+            self.addFirst(patient)
+        
+        else:
+            aux= self._head      
+            pos=0
+            #This will tell us if the patient is already stored in the list or not                
+            inside_list=False    
+
+            while aux and not inside_list:
+
+                if aux.elem.name==patient.name:   #If running through the list we find the the patient is already added
+                                                    # to the list we wont do anything
+                    inside_list=True
+                elif aux.elem.name > patient.name:        #We run throught the list and we find the exact position at which to
+                                                        # insert the patient
+                    self.insertAt(pos,patient)
+                    inside_list=True
+                else:                               #This is used to continue running through the list,updating aux and pos
+                    aux=aux.next
+                    pos+=1
+
+
+            if not aux:                #This means that we have run through the whole list and the only option is to                                   
+                self.addLast(patient)
+       
+                                  
     def searchPatients(self,year,covid=None,vaccine=None):
         "search for all patients within the given parameters"
         result = HealthCenter()         
         #Node current will point to head    
         current = self._head    
                    
-        #could be an aux method / no need to check if the head is empty bc in that case will return an empty DList.      
+        #no need to check if the head is empty bc in that case will return an empty DList.      
         while current:
             if year == 2021 or year >= current.elem.year:               
                 if covid == None:
@@ -166,60 +142,72 @@ class HealthCenter(DList):
 
     def merge(self,other):
        "Merges the patients of two health centers"
-       result = self
+       #result = self
        #Node current will point to head    
        current = other._head      
                       
        while current:
-           result.addPatient(current.elem)
+           self.addPatient(current.elem)
            current = current.next   
-       return result
+       return self
     
-   
-
     def minus(self,other):
         "Deletes patients in the invoking center that are in the given center"
-        #Makes a copy of self HealthCenter
-        result = self
-        #Sets the current node for the second list
-        current_other = other._head      
-        #Goes first through the second list
-        while current_other:
-           current = result._head
-           #Sets an index to know the position of the node in case it has to be deleted
-           i = 0
-           #Goes through the first list to search for the Patients of second list one by one          
-           while current:
-               if current_other.elem.name == current.elem.name:
-                   #Saves the next pointer before deleting the node at i position
-                   current = current.next                                
-                   result.removeAt(i)                              
-               else:
-                   #Sets the next position in case it didn't find the element
-                    current = current.next                  
-               i = i + 1
-           current_other = current_other.next   	
-        return result
+        new_center=HealthCenter()
+        aux=self._head  
+        aux_other=other._head
+        
+        while aux:
+            #If it founds two similar patients
+            found=False
+            #If smaller is True, goes to the next element because it wont find it in the rest of the list.
+            smaller=False
+
+            while aux_other and not found and not smaller:
+                if aux.elem.name==aux_other.elem.name:
+                    found=True
+                #"aux comes before aux other"
+                elif aux.elem.name<aux_other.elem.name:
+                    smaller=True
+                 #"aux other comes before aux"
+                elif aux.elem.name>aux_other.elem.name:
+                    aux_other=aux_other.next
+
+            if not found:
+                new_center.addPatient(aux.elem)
+
+            aux=aux.next
+
+        return new_center
     
     def inter(self,other):
         "Intersects patients of the invoking center with the patients of the given one"
-        result = HealthCenter()
-        #Sets the current node for the second list
-        current_other = other._head      
-        #Goes first through the second list
-        while current_other:
-           current = self._head
-           #Sets an index to know the position of the node in case it has to be deleted
+        new_center=HealthCenter()
+        aux=self._head
+        aux_other=other._head
 
-           #Goes through the first list to search for the Patients of second list one by one          
-           while current:
-               if current_other.elem.name == current.elem.name:
-                   #Saves the next pointer before deleting the node at i position
-                   result.addPatient(current.elem)                                  
-               current = current.next                  
+        while aux:
+            found=False
+            #If smaller is True, goes to the next element because it wont find it in the rest of the list.
+            smaller=False
+            while aux_other and not found and not smaller:
+                if aux.elem.name==aux_other.elem.name:
+                    found=True
 
-           current_other = current_other.next   	
-        return result
+                #"aux comes before aux other"
+                if aux.elem.name<aux_other.elem.name:
+                    smaller=True
+
+                 #"aux other comes before aux"
+                if aux.elem.name>aux_other.elem.name:
+                    aux_other=aux_other.next
+
+            if found:
+                new_center.addPatient(aux.elem)
+
+            aux=aux.next
+
+        return new_center
                 
     
      
