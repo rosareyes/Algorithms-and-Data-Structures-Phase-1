@@ -56,26 +56,25 @@ class HealthCenter(DList):
             self.addFirst(patient)
         
         else:
-            aux= self._head      
+            current= self._head      
             pos=0
             #This will tell us if the patient is already stored in the list or not                
             inside_list=False    
 
-            while aux and not inside_list:
+            while current and not inside_list:
 
-                if aux.elem.name==patient.name:   #If running through the list we find the the patient is already added
+                if current.elem.name==patient.name:   #If running through the list we find the the patient is already added
                                                     # to the list we wont do anything
                     inside_list=True
-                elif aux.elem.name > patient.name:        #We run throught the list and we find the exact position at which to
+                elif current.elem.name > patient.name:        #We run throught the list and we find the exact position at which to
                                                         # insert the patient
                     self.insertAt(pos,patient)
                     inside_list=True
                 else:                               #This is used to continue running through the list,updating aux and pos
-                    aux=aux.next
+                    current=current.next
                     pos+=1
 
-
-            if not aux:                #This means that we have run through the whole list and the only option is to                                   
+            if not current:                #This means that we have run through the whole list and the only option is to                                   
                 self.addLast(patient)
        
                                   
@@ -154,58 +153,58 @@ class HealthCenter(DList):
     def minus(self,other):
         "Deletes patients in the invoking center that are in the given center"
         new_center=HealthCenter()
-        aux=self._head  
-        aux_other=other._head
+        current=self._head  
+        current_other=other._head
         
-        while aux:
+        while current:
             #If it founds two similar patients
             found=False
             #If smaller is True, goes to the next element because it wont find it in the rest of the list.
             smaller=False
 
-            while aux_other and not found and not smaller:
-                if aux.elem.name==aux_other.elem.name:
+            while current_other and not found and not smaller:
+                if current.elem.name==current_other.elem.name:
                     found=True
-                #"aux comes before aux other"
-                elif aux.elem.name<aux_other.elem.name:
+                #"current comes before current other"
+                elif current.elem.name<current_other.elem.name:
                     smaller=True
-                 #"aux other comes before aux"
-                elif aux.elem.name>aux_other.elem.name:
-                    aux_other=aux_other.next
+                 #"current other comes before current"
+                elif current.elem.name>current_other.elem.name:
+                    current_other=current_other.next
 
             if not found:
-                new_center.addPatient(aux.elem)
+                new_center.addPatient(current.elem)
 
-            aux=aux.next
+            current=current.next
 
         return new_center
     
     def inter(self,other):
         "Intersects patients of the invoking center with the patients of the given one"
         new_center=HealthCenter()
-        aux=self._head
-        aux_other=other._head
+        current=self._head
+        current_other=other._head
 
-        while aux:
+        while current:
             found=False
             #If smaller is True, goes to the next element because it wont find it in the rest of the list.
             smaller=False
-            while aux_other and not found and not smaller:
-                if aux.elem.name==aux_other.elem.name:
+            while current_other and not found and not smaller:
+                if current.elem.name==current_other.elem.name:
                     found=True
 
-                #"aux comes before aux other"
-                if aux.elem.name<aux_other.elem.name:
+                #"current comes before current other"
+                if current.elem.name<current_other.elem.name:
                     smaller=True
 
-                 #"aux other comes before aux"
-                if aux.elem.name>aux_other.elem.name:
-                    aux_other=aux_other.next
+                 #"current other comes before current"
+                if current.elem.name>current_other.elem.name:
+                    current_other=current_other.next
 
             if found:
-                new_center.addPatient(aux.elem)
+                new_center.addPatient(current.elem)
 
-            aux=aux.next
+            current=current.next
 
         return new_center
                 
